@@ -16,7 +16,7 @@ create table if not exists evangelism.user(
         check (status in ('ACTIVE','INACTIVE'))
 );
 
-create index index_user_email on user(email);
+create index index_user_email on evangelism.user(email);
 
 create table if not exists evangelism.user_roles (
    user_id uuid NOT NULL,
