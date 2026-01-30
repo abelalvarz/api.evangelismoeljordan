@@ -1,20 +1,24 @@
-package com.evangelism.api.dto;
+package com.evangelism.api.dto.response;
 
 import com.evangelism.api.entity.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserResponseDTO {
-    private String firstName;
-    private String lastName;
+@Builder
+public class UserResponse {
+    private UUID id;
+    private String name;
     private String email;
     private String phoneNumber;
     private Set<Role> roles;
-    private CellSummaryDTO cell;
+    private String status;
+    private CellResponse cell;
 }

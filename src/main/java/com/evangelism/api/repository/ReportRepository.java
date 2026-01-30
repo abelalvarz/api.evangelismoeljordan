@@ -14,7 +14,6 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
 
     boolean existsByCellAndMeetingDate(Cell cell, LocalDate meetingDate);
     boolean existsByCellAndMeetingDateBetween(Cell cell, LocalDate startDate, LocalDate endDate);
-    List<Report> findAllByCell(Cell cell);
     List<Report> findAllByCellAndMeetingDateBetween(Cell cell, LocalDate startDate, LocalDate endDate);
     List<Report> findAllByMeetingDateBetween(LocalDate startDate, LocalDate endDate);
 }

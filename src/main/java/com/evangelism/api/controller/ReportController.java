@@ -1,7 +1,7 @@
 package com.evangelism.api.controller;
 
 import com.evangelism.api.converter.ResponseConverter;
-import com.evangelism.api.dto.Response;
+import com.evangelism.api.dto.response.Response;
 import com.evangelism.api.dto.request.ReportRequest.ReportRequest;
 import com.evangelism.api.service.ReportService;
 import com.evangelism.api.security.CustomUserDetails;
@@ -50,34 +50,33 @@ public class ReportController {
     }
 
     @GetMapping("/my-cell")
-    public ResponseEntity<Response> getMyCellReports(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Response> getMyCellReports(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                     @RequestParam("startDate") LocalDate startDate,
+                                                     @RequestParam("endDate") LocalDate endDate) {
         return ResponseEntity.ok(
-                responseConverter.convert(reportService.findByUserCell(userDetails.getUser().getId())
-        ));
-    }
-    @GetMapping("/my-cell/f")
-    public ResponseEntity<Response> getWeeklyReportIfExists(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                               @RequestParam("startDate") LocalDate startDate,
-                                                               @RequestParam("endDate") LocalDate endDate) {
-        UUID userId = userDetails.getUser().getId();
-        return ResponseEntity.ok(
-                responseConverter.convert(reportService.getWeeklyReportIfExists(userId, startDate, endDate)
-                ));
+                responseConverter.convert(reportService.findByUserCell(
+                        userDetails.getUser().getId(),
+                        startDate,
+                        endDate
+                )));
     }
 
-    @GetMapping("/exists")
-    public ResponseEntity<Response> validateExistsOneBetweenDateAndCellId(@RequestParam("cellId") UUID cellId,
+    @GetMapping("/validate")
+    public ResponseEntity<Response> checkExistence(@RequestParam("cellId") UUID cellId,
                                                   @RequestParam("startDate") LocalDate startDate,
                                                   @RequestParam("endDate") LocalDate endDate) {
         return ResponseEntity.ok(
-                responseConverter.convert(reportService.findExistsReport(cellId,startDate, endDate)
-                ));
+                responseConverter.convert(reportService.validateReportExistence(
+                        cellId,
+                        startDate,
+                        endDate
+                )));
     }
 
     @DeleteMapping("/{reportId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> deleteReport(@PathVariable UUID reportId){
         reportService.deleteReport(reportId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(responseConverter.convert(null));
+        return ResponseEntity.noContent().build();
     }
 }

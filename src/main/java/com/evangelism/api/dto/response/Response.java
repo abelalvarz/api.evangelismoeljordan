@@ -1,4 +1,4 @@
-package com.evangelism.api.dto;
+package com.evangelism.api.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

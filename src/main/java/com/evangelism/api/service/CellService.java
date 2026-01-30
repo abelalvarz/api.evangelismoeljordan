@@ -1,6 +1,6 @@
 package com.evangelism.api.service;
 
-import com.evangelism.api.dto.CellSummaryDTO;
+import com.evangelism.api.dto.response.CellResponse;
 import com.evangelism.api.entity.Cell;
 import com.evangelism.api.entity.Role;
 import com.evangelism.api.entity.User;
@@ -20,21 +20,21 @@ public class CellService {
     private final CellRepository cellRepository;
     private final CellMapper cellMapper;
 
-    public List<CellSummaryDTO> getAll(){
+    public List<CellResponse> getAll(){
         List<Cell> cells = findAll();
         return cellMapper.toCellResponseList(cells);
     }
-    public CellSummaryDTO getById(UUID cellId){
+
+    public CellResponse getById(UUID cellId){
         Cell cell = findById(cellId);
         return cellMapper.toCellResponse(cell);
     }
 
-
-    public CellSummaryDTO findCellByUserAndRole (User user){
+    public CellResponse findCellByUserAndRole (User user){
         if (user.getRoles().contains(Role.ADMIN)) return null;
 
         return cellRepository.findByTeacherOrSecretary(user, user)
-                .map(cell -> new CellSummaryDTO(cell.getId(), cell.getName(), cell.getTeacher().getFullName()))
+                .map(cell -> new CellResponse(cell.getId(), cell.getName(), cell.getTeacher().getFullName()))
                 .orElse(null);
     }
 

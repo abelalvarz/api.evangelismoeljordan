@@ -43,11 +43,24 @@ public class Report {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    @PrePersist
-    @PreUpdate
-    public void validateAndCalculate() {
-        if (this.attendanceDetail != null) {
-            this.attendanceDetail.calculateTotalAttendance();
+    public void setAttendanceDetail(ReportAttendanceDetail attendanceDetail) {
+        this.attendanceDetail = attendanceDetail;
+        if (attendanceDetail != null) {
+            attendanceDetail.setReport(this);
+        }
+    }
+
+    public void setEvangelismDetail(ReportEvangelismDetail evangelismDetail) {
+        this.evangelismDetail = evangelismDetail;
+        if (evangelismDetail != null) {
+            evangelismDetail.setReport(this);
+        }
+    }
+
+    public void setFinanceDetail(ReportFinanceDetail financeDetail) {
+        this.financeDetail = financeDetail;
+        if (financeDetail != null) {
+            financeDetail.setReport(this);
         }
     }
 }

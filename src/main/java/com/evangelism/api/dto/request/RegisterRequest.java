@@ -18,4 +18,8 @@ public class RegisterRequest {
     private String password;
     private Set<Role> roles;
     private java.util.UUID cellId;
+
+    public boolean isCellUser(){
+        return cellId != null;
+    }
 }

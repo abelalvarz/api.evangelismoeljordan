@@ -1,5 +1,6 @@
 package com.evangelism.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class User {
     private String phone;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "status", nullable = false)
@@ -49,6 +51,12 @@ public class User {
 
     public boolean isAdmin(){
         return this.getRoles().contains(Role.ADMIN);
+    }
+    public boolean isTeacher(){
+        return this.getRoles().contains(Role.TEACHER);
+    }
+    public boolean isSecretary(){
+        return this.getRoles().contains(Role.SECRETARY);
     }
     public String getFullName(){
         return firstName + " " + lastName;

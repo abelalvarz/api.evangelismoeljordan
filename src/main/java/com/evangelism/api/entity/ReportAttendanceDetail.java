@@ -1,9 +1,7 @@
 package com.evangelism.api.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,6 +10,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReportAttendanceDetail {
 
     @Id
@@ -43,6 +43,12 @@ public class ReportAttendanceDetail {
 
     @Column(name = "total_attendance", nullable = false)
     private int totalAttendance;
+
+    @PrePersist
+    @PreUpdate
+    public void prePersist() {
+        calculateTotalAttendance();
+    }
 
     public void calculateTotalAttendance() {
         this.totalAttendance =  activeMembers + activeChildren + inactiveMembers + inactiveChildren + visitorChildren + visitorAdults;

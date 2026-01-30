@@ -1,4 +1,4 @@
-package com.evangelism.api.dto;
+package com.evangelism.api.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder
-public class CellSummaryDTO {
+public class CellResponse {
     private UUID id;
     private String name;
     private String teacherName;

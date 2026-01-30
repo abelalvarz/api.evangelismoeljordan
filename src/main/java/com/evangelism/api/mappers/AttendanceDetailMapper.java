@@ -15,9 +15,9 @@ public class AttendanceDetailMapper {
                 .inactiveMembers(dto.getInactiveMembers())
                 .visitorAdults(dto.getVisitorAdults())
                 .visitorChildren(dto.getVisitorChildren())
-                .totalAttendance(dto.getTotalAttendance())
                 .build();
     }
+
     public AttendanceDetailDto toDto(ReportAttendanceDetail entity){
         return AttendanceDetailDto.builder()
                 .activeMembers(entity.getActiveMembers())

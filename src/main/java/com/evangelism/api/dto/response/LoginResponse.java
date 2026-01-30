@@ -1,4 +1,4 @@
-package com.evangelism.api.dto;
+package com.evangelism.api.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +10,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class JwtResponse {
+public class LoginResponse {
     private String token;
     private UUID id;
     private String email;
     private Set<String> roles;
-    private CellSummaryDTO cell;
+    private CellResponse cell;
 }

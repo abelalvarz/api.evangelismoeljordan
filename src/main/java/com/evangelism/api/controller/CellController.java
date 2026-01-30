@@ -1,7 +1,7 @@
 package com.evangelism.api.controller;
 
 import com.evangelism.api.converter.ResponseConverter;
-import com.evangelism.api.dto.Response;
+import com.evangelism.api.dto.response.Response;
 import com.evangelism.api.service.CellService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

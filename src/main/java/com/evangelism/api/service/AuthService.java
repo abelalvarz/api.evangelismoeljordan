@@ -1,7 +1,7 @@
 package com.evangelism.api.service;
 
-import com.evangelism.api.dto.JwtResponse;
-import com.evangelism.api.dto.UserResponseDTO;
+import com.evangelism.api.dto.response.LoginResponse;
+import com.evangelism.api.dto.response.UserResponse;
 import com.evangelism.api.dto.request.LoginRequest;
 import com.evangelism.api.dto.request.RegisterRequest;
 import com.evangelism.api.entity.User;
@@ -26,7 +26,7 @@ public class AuthService {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    public JwtResponse login(LoginRequest loginRequest){
+    public LoginResponse login(LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -36,7 +36,7 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(userDetails);
         User user = userDetails.getUser();
 
-        return new JwtResponse(
+        return new LoginResponse(
                 jwt,
                 user.getId(),
                 user.getEmail(),
@@ -45,13 +45,7 @@ public class AuthService {
         );
     }
 
-    public UserResponseDTO register(RegisterRequest registerRequest){
-        User user = userService.createUser(registerRequest);
-        return userMapper.toResponseDto(user);
-    }
-
-    public UserResponseDTO getValidUser(String email){
-        User user = userService.findByEmail(email);
-        return userMapper.toResponseDto(user);
+    public UserResponse register(RegisterRequest registerRequest){
+        return userService.createUser(registerRequest);
     }
 }

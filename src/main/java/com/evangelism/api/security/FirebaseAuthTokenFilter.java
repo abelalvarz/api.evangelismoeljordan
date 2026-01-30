@@ -52,7 +52,6 @@ public class FirebaseAuthTokenFilter extends OncePerRequestFilter {
                 }
             } catch (Exception e) {
                 log.error("Error al authenticar: {}", e.getMessage());
-                // Token inválido o expirado, no autenticar
             }
         }
         filterChain.doFilter(request, response);

@@ -1,16 +1,20 @@
 package com.evangelism.api.dto.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AttendanceDetailDto {
-    private int activeMembers;
-    private int activeChildren;
-    private int inactiveMembers;
-    private int inactiveChildren;
-    private int visitorChildren;
-    private int visitorAdults;
-    private int totalAttendance;
+    private Integer activeMembers;
+    private Integer activeChildren;
+    private Integer inactiveMembers;
+    private Integer inactiveChildren;
+    private Integer visitorChildren;
+    private Integer visitorAdults;
+    private Integer totalAttendance;
 }

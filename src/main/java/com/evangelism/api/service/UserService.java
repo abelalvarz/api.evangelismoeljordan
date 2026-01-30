@@ -1,5 +1,6 @@
 package com.evangelism.api.service;
 
+import com.evangelism.api.dto.response.UserResponse;
 import com.evangelism.api.dto.request.RegisterRequest;
 import com.evangelism.api.entity.Cell;
 import com.evangelism.api.entity.Role;
@@ -25,7 +26,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createUser(RegisterRequest registerRequest){
+    public UserResponse createUser(RegisterRequest registerRequest){
 
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new RuntimeException("Email is already in use");
@@ -36,34 +37,41 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        if (registerRequest.getCellId() != null && user.getRoles() != null) {
-            assignUserToCell(user, registerRequest.getCellId());
+        if (!registerRequest.isCellUser()) {
+            return userMapper.toResponseDto(user, null);
         }
-        return savedUser;
+        Cell assignedCell = assignUserToCell(savedUser, registerRequest.getCellId());
+        return userMapper.toResponseDto(user, assignedCell);
     }
 
     public User findById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    public User findByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserResponse findByUserId(UUID id){
+        User user = findById(id);
+        if(user.isAdmin())
+            return userMapper.toResponseDto(user, null);
+
+        Cell cell = cellRepository.findByTeacherOrSecretary(user)
+                .orElseThrow(() -> new ResourceNotFoundException("User is not assigned to any cell:" + id));
+
+        return userMapper.toResponseDto(user, cell);
     }
 
-    private void assignUserToCell(User user, UUID cellId) {
+    private Cell assignUserToCell(User user, UUID cellId) {
         Cell cell = cellRepository.findById(cellId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cell not found with ID: " + cellId));
 
-        if (cell != null) {
-            if (user.getRoles().contains(Role.TEACHER)) {
-                isAvailableRole(cell, Role.TEACHER);
-                cell.setTeacher(user);
-            } else if (user.getRoles().contains(Role.SECRETARY)) {
-                isAvailableRole(cell, Role.SECRETARY);
-                cell.setSecretary(user);
-            }
-            cellRepository.save(cell);
+        if (user.getRoles().contains(Role.TEACHER)) {
+            isAvailableRole(cell, Role.TEACHER);
+            cell.setTeacher(user);
+        } else if (user.getRoles().contains(Role.SECRETARY)) {
+            isAvailableRole(cell, Role.SECRETARY);
+            cell.setSecretary(user);
         }
+        return cellRepository.save(cell);
     }
     private void isAvailableRole(Cell cell, Role role){
         if(cell.getTeacher() != null &&  role == Role.TEACHER){

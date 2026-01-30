@@ -24,9 +24,4 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerRequest));
     }
-
-    @GetMapping("/valid/{email}")
-    public ResponseEntity<?> getValidatedUser(@PathVariable String email){
-        return ResponseEntity.ok(authService.getValidUser(email));
-    }
 }
